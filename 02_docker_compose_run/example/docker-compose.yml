@@ -1,0 +1,30 @@
+version: '3.7'
+
+services:
+  nodd-app1:
+    image: node-app1:latest
+    build:
+      context: ./../
+      dockerfile: ./Dockerfile/Dockerfile
+    ports:
+      - "3001:3001"
+    deploy:
+      replicas: 4
+      resources:
+        limits:
+          cpus: '0.25'
+          memory: 256M
+        reservations:
+          memory: 256M
+    restart: always
+    networks:
+      - node-network
+    logging:
+      #limit logs to 150MB (3rotations of 50M each)
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "3"
+        
+networks:
+  node-network:
